@@ -1,0 +1,15 @@
+
+.campaign_cell {
+	width:100px;
+	padding:10px;
+	background-color: lightblue;
+}
+
+.campaign_title {
+	background-color: blue;
+}
+
+.title {
+	font-size: 20px;
+	font-weight: bold;
+}

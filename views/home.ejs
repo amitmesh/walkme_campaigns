@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+	<!--link type="text/css" rel="stylesheet" href="mystyles.css"-->
+    <meta charset="utf-8" />
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+</head>
+<style>
+	.campaign_cell {
+		width:100px;
+		padding:10px;
+		background-color: lightblue;
+	}
+
+	.campaign_title {
+		background-color: blue;
+	}
+
+	.title {
+		font-size: 20px;
+		font-weight: bold;
+	}
+</style>
+<script>
+var myCampaigns = <%- JSON.stringify(campaigns) %>;
+ 
+function resetCampaignCounter(campaignId, rowIndex) {
+	$.post("http://localhost:2000/resetCampaignCounter",
+		{ campaign_id: campaignId }, 
+		function(data) {
+			var campaignCounterCell = document.getElementById("counter_" + rowIndex);
+			for (i = 0; i < data.length; i++) { 
+				if (data[i].id == campaignId) {
+					campaignCounterCell.innerHTML = data[i].counter;
+				}
+			}	
+		}
+	);	
+}	
+
+</script>
+<body>
+	<h1>Campaigns</h1>
+	<table id="campaignsList">
+		<tr class="campaign_title">
+			<th class="campaign_cell">ID</th>
+			<th class="campaign_cell">Name</th>
+			<th class="campaign_cell">Counter</th>
+			<th class="campaign_cell">Max Total</th>
+			<th class="campaign_cell">Max Per User</th>
+			<th class="campaign_cell"></th>
+		</tr>
+		<%for (var i = 0; i < campaigns.length; i++) {%>
+			<tr>
+				<th class="campaign_cell"><%= campaigns[i].id %></th>
+				<th class="campaign_cell"><%= campaigns[i].name %></th>
+				<th class="campaign_cell" id='counter_<%= i %>'><%= campaigns[i].counter %></th>
+				<th class="campaign_cell"><%= campaigns[i].thresholds.max_total %></th>
+				<th class="campaign_cell"><%= campaigns[i].thresholds.max_per_user %></th>
+				<th class="campaign_cell">
+					<input name="Submit"  type="submit" value="Reset Counter" onClick="JavaScript:resetCampaignCounter(<%= campaigns[i].id %>, <%= i %>)"/>
+				</th>
+			</tr>
+		<%}%>
+    </table>
+
+</body>
+</html>
